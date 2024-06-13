@@ -9,36 +9,25 @@ import (
 
 var ctx = context.Background()
 
-var DBPOOL *pgxpool.Pool
+var dbInstance *pgxpool.Pool
 
-func InitDB() {
-	connPool, err := pgxpool.NewWithConfig(ctx, Config())
+func InitDB() error {
+	pool, err := pgxpool.NewWithConfig(ctx, Config())
 	if err != nil {
 		log.Fatal("unable to connect to database: ", err)
 	}
 
-	err = connPool.Ping(ctx)
-	if err != nil {
-		panic(err)
-	}
+	dbInstance = pool
 
-	DBPOOL = connPool
-
-	connection, err := connPool.Acquire(ctx)
-	if err != nil {
-		log.Fatal("error while acquiring connection from the database pool!")
-	}
-	defer connection.Release()
-
-	err = connection.Ping(ctx)
-	if err != nil {
-		log.Fatal("could not ping database")
-	}
-
-	//defer connPool.Close()
+	return nil
 }
 
-/*
--- Use the quote_literal function to escape user input
-SELECT * FROM users WHERE username = quote_literal(input_username);
-*/
+func GetDB() *pgxpool.Pool {
+	return dbInstance
+}
+
+func CloseDB() {
+	if dbInstance != nil {
+		dbInstance.Close()
+	}
+}
