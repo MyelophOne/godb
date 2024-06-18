@@ -17,7 +17,6 @@ func InitDB() error {
 		log.Fatal("unable to connect to database: ", err)
 		return err
 	}
-
 	dbInstance = pool
 
 	return nil
