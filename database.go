@@ -7,13 +7,15 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
+var dbInstance *pgxpool.Pool
+
 var ctx = context.Background()
 
-func InitDB() (*pgxpool.Pool, error) {
+func InitDB() error {
 	pool, err := pgxpool.NewWithConfig(ctx, Config())
 	if err != nil {
 		log.Fatal("unable to connect to database: ", err)
-		return pool, err
+		return err
 	}
 
 	dbInstance = pool
