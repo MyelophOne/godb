@@ -15,6 +15,7 @@ func InitDB() error {
 	pool, err := pgxpool.NewWithConfig(ctx, Config())
 	if err != nil {
 		log.Fatal("unable to connect to database: ", err)
+		return err
 	}
 
 	dbInstance = pool
