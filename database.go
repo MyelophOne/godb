@@ -32,6 +32,10 @@ func Exec(query string, args ...interface{}) error {
 	return err
 }
 
+func GetDB() *pgxpool.Pool {
+	return dbInstance
+}
+
 func Close() {
 	dbInstance.Close()
 }
